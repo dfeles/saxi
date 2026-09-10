@@ -7,7 +7,8 @@
 
 import http from "node:http";
 import type { AddressInfo } from "node:net";
-import path from 'node:path';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { autoDetect } from '@serialport/bindings-cpp';
 import type { PortInfo } from "@serialport/bindings-interface";
 import cors from "cors";
@@ -44,9 +45,15 @@ const getDeviceInfo = (ebb: EBB | null, _com: Com) => {
  * @param maxPayloadSize
  * @returns
  */
+/** Package root (directory containing dist/), so the server works when run from any cwd (e.g. global install). */
+const packageRoot = (() => {
+  const dir = path.dirname(fileURLToPath(import.meta.url));
+  return path.join(dir, "..", "..");
+})();
+
 export async function startServer(port: number, hardware: Hardware = 'v3', com: Com = null, enableCors = false, maxPayloadSize = '200mb', svgIoApiKey = '') {
   const app = express();
-  app.use('/', express.static(path.join(path.resolve(), 'dist', 'ui')));
+  app.use("/", express.static(path.join(packageRoot, "dist", "ui")));
   app.use(express.json({ limit: maxPayloadSize }));
   if (enableCors) {
     app.use(cors());

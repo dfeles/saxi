@@ -156,6 +156,18 @@ $ npm run start
 
 This will not watch local files for changes. If you change the server code, you'll need to restart manually.
 
+#### Run this repo as the global `saxi` command
+
+To use your local clone as the global `saxi` command (so you can run `saxi` from any directory and it starts this environment):
+
+```sh
+$ cd saxi
+$ npm run build
+$ npm link
+```
+
+Then run `saxi` from anywhere; it will use this repo’s build and serve the UI from here. Re-run `npm run build` after changing server or UI code.
+
 ### Credits
 
 saxi's motion planning algorithm is heavily inspired by Michael Fogleman's
